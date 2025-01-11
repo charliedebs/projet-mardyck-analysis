@@ -2,10 +2,10 @@ name: Update Content
 
 on:
   issues:
-    types: [opened]
+    types: [opened, edited]
 
 jobs:
-  update-content:
+  process-content:
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -14,9 +14,36 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+          
       - name: Process Issue Content
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # Script pour traiter le contenu des issues
           echo "Processing content update request"
+          python -c "
+          import os
+          import json
+          import sys
+          
+          # Lire le contenu de l'issue
+          issue_title = os.environ.get('GITHUB_EVENT_NAME')
+          issue_body = os.environ.get('GITHUB_EVENT_PATH')
+          
+          print(f'Processing issue: {issue_title}')
+          print(f'Content: {issue_body}')
+          
+          # Créer ou mettre à jour les fichiers selon le contenu
+          # TODO: Implémenter la logique de mise à jour des fichiers
+          "
+          
+      - name: Commit changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add -A
+          git diff --quiet && git diff --staged --quiet || git commit -m "Update content based on issue"
+          git push
