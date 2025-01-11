@@ -1,16 +1,17 @@
-# Projet Mardyck - Analyse et Études
+# Projet Mardyck - Analyse Financière
 
-## Description
-Ce dépôt contient les analyses et études relatives au projet Mardyck.
-
-## Structure du Projet
-- `/data` : Données brutes et traitées
-- `/analyses` : Rapports d'analyse
-- `/scripts` : Scripts d'analyse de données
-- `/docs` : Documentation du projet
-
-## Installation et Utilisation
-[À venir]
-
-## Contribution
-[À définir]
+## Structure du projet
+```
+/analyses
+  /finances
+    - acquisition.md       # Coûts d'acquisition
+    - exploitation.md      # Coûts d'exploitation
+    - revenus.md          # Analyse des revenus
+    - rentabilite.md      # Analyse de rentabilité
+  /marche
+    - etude_locale.md     # Analyse du marché local
+    - comparables.md      # Analyse des biens comparables
+  /technique
+    - batiment.md         # Analyse technique du bâtiment
+    - travaux.md          # Estimation des travaux
+```
