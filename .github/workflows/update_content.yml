@@ -1,0 +1,22 @@
+name: Update Content
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  update-content:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+    
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: Process Issue Content
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Script pour traiter le contenu des issues
+          echo "Processing content update request"
