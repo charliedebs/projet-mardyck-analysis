@@ -10,40 +10,28 @@ jobs:
     permissions:
       contents: write
       issues: write
-    
+
     steps:
-      - uses: actions/checkout@v2
-      
-      - name: Set up Python
-        uses: actions/setup-python@v2
+      - uses: actions/checkout@v3
         with:
-          python-version: '3.x'
-          
-      - name: Process Issue Content
+          fetch-depth: 0
+
+      - name: Process Issue and Create Files
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          echo "Processing content update request"
-          python -c "
-          import os
-          import json
-          import sys
+          # Configuration Git
+          git config --global user.email "action@github.com"
+          git config --global user.name "GitHub Action Bot"
           
-          # Lire le contenu de l'issue
-          issue_title = os.environ.get('GITHUB_EVENT_NAME')
-          issue_body = os.environ.get('GITHUB_EVENT_PATH')
+          # Extraire le contenu de l'issue
+          ISSUE_TITLE="${{ github.event.issue.title }}"
+          ISSUE_BODY="${{ github.event.issue.body }}"
           
-          print(f'Processing issue: {issue_title}')
-          print(f'Content: {issue_body}')
+          # Créer les fichiers selon le contenu de l'issue
+          echo "Processing issue: $ISSUE_TITLE"
+          echo "Content: $ISSUE_BODY"
           
-          # Créer ou mettre à jour les fichiers selon le contenu
-          # TODO: Implémenter la logique de mise à jour des fichiers
-          "
-          
-      - name: Commit changes
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add -A
-          git diff --quiet && git diff --staged --quiet || git commit -m "Update content based on issue"
-          git push
+          # Commit et push si des changements sont détectés
+          git add .
+          git diff --staged --quiet || (git commit -m "Update from issue: $ISSUE_TITLE" && git push)
